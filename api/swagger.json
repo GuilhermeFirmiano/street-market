@@ -1,0 +1,778 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Street Market API",
+      "description": "Gerenciamento de Feiras",
+      "contact": {
+        "email": "guilherme.15@gmail.com"
+      }
+    },
+    "tags": [
+      {
+        "name": "street market"
+      },
+      {
+        "name": "health check"
+      }
+    ],
+    "paths": {
+      "/healthz": {
+        "get": {
+          "tags": [
+            "health check"
+          ],
+          "summary": "Validar a saúde da API",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/street-market": {
+        "post": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Criar uma nova feira",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreetMarketPostRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StreetMarketResponse"
+                  }
+                }
+              },
+              "headers": {
+                "Location": {
+                  "schema": {
+                    "type": "string",
+                    "description": "self link for the created resource"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Invalid Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Informação das feiras livre",
+          "parameters": [
+            {
+              "name": "page",
+              "required": true,
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "número da página."
+            },
+            {
+              "name": "per_page",
+              "required": true,
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "número de registros por página."
+            },
+            {
+              "name": "lat",
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "latitude da localização do endereço no território do Município."
+            },
+            {
+              "name": "long",
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "longitude da localização do endereço no território do Município."
+            },
+            {
+              "name": "distance",
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "distância em metros para buscar as feiras livres."
+            },
+            {
+              "name": "registry",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "número do registro da feira livre na PMSP."
+            },
+            {
+              "name": "district",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "nome do Distrito Municipal"
+            },
+            {
+              "name": "region_5",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "região conforme divisão do Município em cinco áreas"
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "denominação da feira livre atribuída pela Supervisão de Abastecimento"
+            },
+            {
+              "name": "neighborhood",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "bairro de localização da feira livre"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StreetMarketResponsePage"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Invalid Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Deletar uma feira livre",
+          "parameters": [
+            {
+              "name": "registry",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "número do registro da feira livre na PMSP."
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "422": {
+              "description": "Invalid Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/street-market/{id}": {
+        "get": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Informação de uma feira livre",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "street market id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StreetMarketResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Atualização dos registros de uma feira livre",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "street market id"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreetMarketPutRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StreetMarketResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Invalid Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "street market"
+          ],
+          "summary": "Deletar uma feira livre",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "street market id"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "StreetMarketPostRequest": {
+          "type": "object",
+          "required": [
+            "long",
+            "lat",
+            "census_sectors",
+            "weighing_area",
+            "district_id",
+            "district",
+            "sub_city_hall_id",
+            "sub_city_hall",
+            "region_5",
+            "region_8",
+            "name",
+            "registry",
+            "address_line",
+            "neighborhood"
+          ],
+          "properties": {
+            "long": {
+              "type": "number",
+              "example": -46550164,
+              "description": "longitude da localização do endereço no território do Município."
+            },
+            "lat": {
+              "type": "number",
+              "example": -23558733,
+              "description": "latitude da localização do endereço no território do Município."
+            },
+            "census_sectors": {
+              "type": "string",
+              "example": "355030885000091",
+              "description": "setor censitário conforme IBGE"
+            },
+            "weighing_area": {
+              "type": "string",
+              "example": "3550308005040",
+              "description": "área de ponderação (agrupamento de setores censitários) conforme IBGE 2010"
+            },
+            "district_id": {
+              "type": "string",
+              "example": "87",
+              "description": "código do Distrito Municipal conforme IBGE"
+            },
+            "district": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "nome do Distrito Municipal"
+            },
+            "sub_city_hall_id": {
+              "type": "string",
+              "example": "26",
+              "description": "código de cada uma das 31 Subprefeituras (2003 a 2012)"
+            },
+            "sub_city_hall": {
+              "type": "string",
+              "example": "ARICANDUVA-FORMOSA-CARRAO",
+              "description": "nome da Subprefeitura (31 de 2003 até 2012)"
+            },
+            "region_5": {
+              "type": "string",
+              "example": "Leste",
+              "description": "região conforme divisão do Município em cinco áreas"
+            },
+            "region_8": {
+              "type": "string",
+              "example": "Leste 1",
+              "description": "região conforme divisão do Município em oito áreas"
+            },
+            "name": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "denominação da feira livre atribuída pela Supervisão de Abastecimento"
+            },
+            "registry": {
+              "type": "string",
+              "example": "4041-0",
+              "description": "número do registro da feira livre na PMSP."
+            },
+            "address_line": {
+              "type": "string",
+              "example": "RUA MARAGOJIPE",
+              "description": "nome do logradouro onde se localiza a feira livre"
+            },
+            "building_number": {
+              "type": "string",
+              "example": "S/N",
+              "description": "um número do logradouro onde se localiza a feira livre"
+            },
+            "neighborhood": {
+              "type": "string",
+              "example": "VL FORMOSA",
+              "description": "bairro de localização da feira livre"
+            },
+            "reference": {
+              "type": "string",
+              "example": "TV RUA PRETORIA",
+              "description": "ponto de referência da localização da feira livre"
+            }
+          }
+        },
+        "StreetMarketPutRequest": {
+          "type": "object",
+          "required": [
+            "long",
+            "lat",
+            "census_sectors",
+            "weighing_area",
+            "district_id",
+            "district",
+            "sub_city_hall_id",
+            "sub_city_hall",
+            "region_5",
+            "region_8",
+            "name",
+            "registry",
+            "address_line",
+            "neighborhood"
+          ],
+          "properties": {
+            "long": {
+              "type": "number",
+              "example": -46550164,
+              "description": "longitude da localização do endereço no território do Município."
+            },
+            "lat": {
+              "type": "number",
+              "example": -23558733,
+              "description": "latitude da localização do endereço no território do Município."
+            },
+            "census_sectors": {
+              "type": "string",
+              "example": "355030885000091",
+              "description": "setor censitário conforme IBGE"
+            },
+            "weighing_area": {
+              "type": "string",
+              "example": "3550308005040",
+              "description": "área de ponderação (agrupamento de setores censitários) conforme IBGE 2010"
+            },
+            "district_id": {
+              "type": "string",
+              "example": "87",
+              "description": "código do Distrito Municipal conforme IBGE"
+            },
+            "district": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "nome do Distrito Municipal"
+            },
+            "sub_city_hall_id": {
+              "type": "string",
+              "example": "26",
+              "description": "código de cada uma das 31 Subprefeituras (2003 a 2012)"
+            },
+            "sub_city_hall": {
+              "type": "string",
+              "example": "ARICANDUVA-FORMOSA-CARRAO",
+              "description": "nome da Subprefeitura (31 de 2003 até 2012)"
+            },
+            "region_5": {
+              "type": "string",
+              "example": "Leste",
+              "description": "região conforme divisão do Município em cinco áreas"
+            },
+            "region_8": {
+              "type": "string",
+              "example": "Leste 1",
+              "description": "região conforme divisão do Município em oito áreas"
+            },
+            "name": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "denominação da feira livre atribuída pela Supervisão de Abastecimento"
+            },
+            "registry": {
+              "type": "string",
+              "example": "4041-0",
+              "description": "número do registro da feira livre na PMSP."
+            },
+            "address_line": {
+              "type": "string",
+              "example": "RUA MARAGOJIPE",
+              "description": "nome do logradouro onde se localiza a feira livre"
+            },
+            "building_number": {
+              "type": "string",
+              "example": "S/N",
+              "description": "um número do logradouro onde se localiza a feira livre"
+            },
+            "neighborhood": {
+              "type": "string",
+              "example": "VL FORMOSA",
+              "description": "bairro de localização da feira livre"
+            },
+            "reference": {
+              "type": "string",
+              "example": "TV RUA PRETORIA",
+              "description": "ponto de referência da localização da feira livre"
+            }
+          }
+        },
+        "StreetMarketResponsePage": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "number",
+              "example": 10,
+              "description": "número total de registros encontrados."
+            },
+            "pages": {
+              "type": "number",
+              "example": 50,
+              "description": "número total de paginas encontrados."
+            },
+            "street-markets": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/StreetMarketResponse"
+              }
+            }
+          }
+        },
+        "StreetMarketResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "6049923c69682f1501a1c210",
+              "description": "id da feira livre"
+            },
+            "update_at": {
+              "type": "string",
+              "example": "2021-03-11T03:45:00.662Z",
+              "description": "data da atualização de dados da feira live"
+            },
+            "created_at": {
+              "type": "string",
+              "example": "2021-03-11T03:45:00.662Z",
+              "description": "data da criação da feira live"
+            },
+            "long": {
+              "type": "number",
+              "example": -46550164,
+              "description": "latitude da localização do endereço no território do Município."
+            },
+            "lat": {
+              "type": "number",
+              "example": -23558733,
+              "description": "latitude da localização do endereço no território do Município."
+            },
+            "census_sectors": {
+              "type": "string",
+              "example": "355030885000091",
+              "description": "setor censitário conforme IBGE"
+            },
+            "weighing_area": {
+              "type": "string",
+              "example": "3550308005040",
+              "description": "área de ponderação (agrupamento de setores censitários) conforme IBGE 2010"
+            },
+            "district_id": {
+              "type": "string",
+              "example": "87",
+              "description": "código do Distrito Municipal conforme IBGE"
+            },
+            "district": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "nome do Distrito Municipal"
+            },
+            "sub_city_hall_id": {
+              "type": "string",
+              "example": "26",
+              "description": "código de cada uma das 31 Subprefeituras (2003 a 2012)"
+            },
+            "sub_city_hall": {
+              "type": "string",
+              "example": "ARICANDUVA-FORMOSA-CARRAO",
+              "description": "nome da Subprefeitura (31 de 2003 até 2012)"
+            },
+            "region_5": {
+              "type": "string",
+              "example": "Leste",
+              "description": "região conforme divisão do Município em cinco áreas"
+            },
+            "region_8": {
+              "type": "string",
+              "example": "Leste 1",
+              "description": "região conforme divisão do Município em oito áreas"
+            },
+            "name": {
+              "type": "string",
+              "example": "VILA FORMOSA",
+              "description": "denominação da feira livre atribuída pela Supervisão de Abastecimento"
+            },
+            "registry": {
+              "type": "string",
+              "example": "4041-0",
+              "description": "número do registro da feira livre na PMSP."
+            },
+            "address_line": {
+              "type": "string",
+              "example": "RUA MARAGOJIPE",
+              "description": "nome do logradouro onde se localiza a feira livre"
+            },
+            "building_number": {
+              "type": "string",
+              "example": "S/N",
+              "description": "um número do logradouro onde se localiza a feira livre"
+            },
+            "neighborhood": {
+              "type": "string",
+              "example": "VL FORMOSA",
+              "description": "bairro de localização da feira livre"
+            },
+            "reference": {
+              "type": "string",
+              "example": "TV RUA PRETORIA",
+              "description": "ponto de referência da localização da feira livre"
+            }
+          }
+        },
+        "ApiError": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,7 @@
+grok:
+  api:
+    host: :9001
+    swagger: ./api/swagger.json
+  mongo:
+    connection_string: mongodb://0.0.0.0:27017
+    database: street-market-test
